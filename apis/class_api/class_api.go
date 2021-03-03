@@ -2,8 +2,8 @@ package class_api
 
 import (
 	"encoding/json"
-	"go-workspace/src/config"
-	"go-workspace/src/models"
+	"goworkspace/config"
+	"goworkspace/models"
 	"net/http"
 )
 
@@ -16,6 +16,23 @@ func FindAll(response http.ResponseWriter, request *http.Request) {
 			Db: db,
 		}
 		classes, err2 := classModel.FindAll()
+		if err2 != nil {
+			respondWithError(response, http.StatusBadRequest, err2.Error())
+		} else {
+			respondWithJSON(response, http.StatusOK, classes)
+		}
+	}
+}
+
+func FindEmail(response http.ResponseWriter, request *http.Request) {
+	db, err := config.GetDB()
+	if err != nil {
+		respondWithError(response, http.StatusBadRequest, err.Error())
+	} else {
+		classModel := models.ClassModel{
+			Db: db,
+		}
+		classes, err2 := classModel.FindEmail()
 		if err2 != nil {
 			respondWithError(response, http.StatusBadRequest, err2.Error())
 		} else {
